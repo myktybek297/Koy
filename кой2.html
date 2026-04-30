@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Кой Базар">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A0F08">
+<title>КОЙ БАЗАР — Соода Трекер</title>
+
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCnOjnmIjogItCaOizQlNCw0LfRgNCwIFRyYWNrZXIiLAogICJkZXNjcmlwdGlvbiI6ICLQmtC+0Lkg0YHQvtC+0LPRgNCw0LLQsNC70L7QsgogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFBMEYwOCIsCiAgInRoZW1lX2NvbG9yIjogIiMxQTBGMDgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIyYVdWM1FtOTRQU0l3SURBZ01UQXdJREV3TUNJZ2VHMXNibk05SW1oMGRIQTZMeTkzZDNjdWR6TXViM0puTHpJd01EQXZjM1puSWo0OGNtVmpkQ0IzYVdSMGFEMGlNVEF3SWlCb1pXbG5hSFE5SWpFd01DSWdabWxzYkQwaUl6QmxZVFZsT1NJdlBqeDBaWGgwSUhnOUlqVXdJaUI1UFNJMU5TSWdabTl1ZEMxemFYcGxQU0kwTUNJZ1ptbHNiRDBpZDJocGRHVWlJSFJsZUhRdFlXNWphRzl5UFNKdGFXUmtiR1VpUG1ZOEwzUmxlSFErUEM5emRtYysiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9CiAgXQp9">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCBmaWxsPSIjMUEwRjA4IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY1IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn6SZPC90ZXh0Pjwvc3ZnPg==">
+
+<style>
+:root{
+  --sand:#D4A574;
+  --gold:#E8C547;
+  --cream:#F5EDD6;
+  --dark:#1A0F08;
+  --muted:#9B8470;
+  --card:rgba(255,255,255,0.03);
+  --border:rgba(212,165,116,0.18);
+  --danger:#c0392b;
+  --danger-light:#e74c3c;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--dark);
+  color:var(--cream);
+  overscroll-behavior:none;
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:radial-gradient(ellipse at 80% 0%,rgba(139,69,19,0.12) 0%,transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.app{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+  z-index:1;
+  padding-top:var(--safe-top);
+}
+
+.header{
+  padding:0.8rem 1rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  flex-shrink:0;
+  background:var(--dark);
+}
+
+.header::after{
+  content:'';
+  position:absolute;
+  bottom:-1px;
+  left:1rem;
+  width:60px;
+  height:2px;
+  background:var(--gold);
+}
+
+.logo-box{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+}
+
+.logo-icon{font-size:1.6rem;line-height:1}
+.logo-text{display:flex;flex-direction:column}
+.logo-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--cream);letter-spacing:-0.02em;line-height:1.1}
+.logo-sub{font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--sand);letter-spacing:0.15em;text-transform:uppercase}
+.hd{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);text-align:right;line-height:1.4}
+
+/* BOTTOM NAVIGATION - FIXED */
+.nav{
+  display:flex;
+  justify-content:space-around;
+  align-items:stretch;
+  background:rgba(26,15,8,0.98);
+  border-top:1px solid var(--border);
+  flex-shrink:0;
+  position:relative;
+  padding-bottom:var(--safe-bottom);
+}
+
+.nb{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0.2rem;
+  padding:0.6rem 0.3rem;
+  background:none;
+  border:none;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .2s;
+  flex:1;
+  min-height:56px;
+  font-family:'DM Sans',sans-serif;
+  position:relative;
+  z-index:10;
+}
+
+.nb-icon{font-size:1.3rem;transition:transform .2s}
+.nb-text{font-size:0.55rem;letter-spacing:0.05em;font-weight:500}
+.nb.active{color:var(--gold)}
+.nb.active .nb-icon{transform:scale(1.1)}
+.nb:active{transform:scale(0.95);background:rgba(212,165,116,0.05)}
+
+.main{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:1rem;
+}
+
+.sec{display:none;animation:fu .25s ease}
+.sec.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.stock-banner{
+  background:linear-gradient(135deg,rgba(232,197,71,0.08),rgba(212,165,116,0.04));
+  border:1px solid rgba(232,197,71,0.2);
+  border-radius:8px;
+  padding:0.8rem 1rem;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:0.6rem 1rem;
+  margin-bottom:1.2rem;
+}
+
+.stock-item{display:flex;flex-direction:column;gap:2px}
+.stock-item .sl{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.stock-item .sv{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--gold)}
+.stock-item .sv.sm{font-size:0.95rem;color:var(--cream)}
+
+.panels{display:flex;flex-direction:column;gap:1rem}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem}
+.panel-title{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--sand);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border)}
+
+.field{margin-bottom:0.8rem}
+.field label{display:block;font-size:0.65rem;color:var(--muted);margin-bottom:0.3rem;font-family:'DM Mono',monospace}
+.field input,.field select{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(212,165,116,0.2);
+  color:var(--cream);
+  padding:0.75rem 0.85rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:1rem;
+  border-radius:6px;
+  transition:border-color .2s,background .2s;
+  outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--gold);background:rgba(232,197,71,0.05)}
+.field input::placeholder{color:var(--muted);opacity:0.6}
+.field input[type=date]{-webkit-appearance:none;appearance:none}
+.field input[type=date]::-webkit-calendar-picker-indicator{filter:invert(0.5);width:18px;height:18px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+
+.sell-source-list{margin-bottom:0.8rem;max-height:200px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ssl-item{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.6rem 0.75rem;
+  border:1px solid rgba(212,165,116,0.12);
+  border-radius:6px;
+  margin-bottom:0.4rem;
+  cursor:pointer;
+  transition:all .15s;
+  min-height:52px;
+}
+.ssl-item.selected{border-color:var(--gold);background:rgba(232,197,71,0.07)}
+.ssl-item:active{transform:scale(0.98)}
+.ssl-item .si-name{flex:1;font-size:0.78rem}
+.ssl-item .si-stock{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--sand)}
+.ssl-qty{
+  width:55px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(212,165,116,0.3);
+  color:var(--cream);
+  padding:0.35rem 0.4rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.85rem;
+  border-radius:4px;
+  outline:none;
+  text-align:center;
+}
+.ssl-qty:focus{border-color:var(--gold)}
+
+.prev-box{background:rgba(232,197,71,0.05);border:1px solid rgba(232,197,71,0.18);border-radius:6px;padding:0.8rem;margin:0.8rem 0}
+.prev-row{display:flex;justify-content:space-between;font-size:0.75rem;padding:0.3rem 0}
+.prev-row .pk{color:var(--muted)}
+.prev-row .pv{font-family:'DM Mono',monospace;color:var(--cream)}
+.prev-div{height:1px;background:rgba(212,165,116,0.15);margin:0.4rem 0}
+.prev-row.tot .pk{color:var(--sand)}
+.prev-row.tot .pv{color:var(--gold);font-size:0.85rem}
+.prev-row.pro .pv.pos{color:#81c784}
+.prev-row.pro .pv.neg{color:#e57373}
+
+.btn-p{
+  background:var(--gold);
+  color:var(--dark);
+  border:none;
+  padding:0.9rem 1.5rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:6px;
+  transition:all .2s;
+  font-weight:500;
+  min-height:48px;
+}
+.btn-p:active{transform:scale(0.97);background:var(--sand)}
+.btn-g{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid rgba(212,165,116,0.25);
+  padding:0.9rem 1.2rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:6px;
+  transition:all .2s;
+  min-height:48px;
+}
+.btn-g:active{border-color:var(--sand);color:var(--cream);transform:scale(0.97)}
+
+.btn-d{
+  background:rgba(192,57,43,0.12);
+  color:var(--danger-light);
+  border:1px solid rgba(192,57,43,0.25);
+  padding:0.4rem 0.7rem;
+  font-size:0.6rem;
+  font-family:'DM Mono',monospace;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:4px;
+  transition:all .2s;
+  min-height:36px;
+  white-space:nowrap;
+}
+.btn-d:active{background:rgba(192,57,43,0.25);color:#fff;transform:scale(0.96)}
+
+.btn-row{display:grid;grid-template-columns:1fr auto;gap:0.6rem;margin-top:1rem}
+.btn-clear-all{
+  background:rgba(192,57,43,0.08);
+  color:var(--danger-light);
+  border:1px solid rgba(192,57,43,0.2);
+  padding:0.5rem 0.9rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-radius:4px;
+  transition:all .2s;
+}
+.btn-clear-all:active{background:rgba(192,57,43,0.15)}
+
+.stats-bar{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:rgba(212,165,116,0.1);
+  border:1px solid rgba(212,165,116,0.1);
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:1.2rem;
+}
+.sc{background:rgba(26,15,8,0.9);padding:0.7rem 0.6rem}
+.sc .sl{font-family:'DM Mono',monospace;font-size:0.45rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.sc .sv{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--cream)}
+.sc .sv.gold{color:var(--gold)}
+.sc .sv.green{color:#81c784}
+.sc .sv.red{color:#e57373}
+.sc .sv.sand{color:var(--sand)}
+
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -0.5rem;padding:0 0.5rem}
+table{width:100%;min-width:600px;border-collapse:collapse}
+thead tr{border-bottom:1px solid rgba(212,165,116,0.18)}
+th{text-align:left;font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:0.5rem 0.6rem;white-space:nowrap}
+td{padding:0.6rem;font-size:0.75rem;color:var(--cream);border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:middle}
+tbody tr:active td{background:rgba(212,165,116,0.04)}
+.mono{font-family:'DM Mono',monospace;font-size:0.7rem}
+
+.badge{display:inline-block;padding:2px 6px;border-radius:2px;font-family:'DM Mono',monospace;font-size:0.55rem}
+.bp{background:rgba(76,175,80,0.12);color:#81c784;border:1px solid rgba(76,175,80,0.2)}
+.bl{background:rgba(244,67,54,0.1);color:#e57373;border:1px solid rgba(244,67,54,0.15)}
+.bw{background:rgba(232,197,71,0.1);color:var(--gold);border:1px solid rgba(232,197,71,0.18)}
+
+.ag{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1rem}
+.ac{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1rem;position:relative;overflow:hidden}
+.ac::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--gold);opacity:.3}
+.ac h3{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sand);margin-bottom:0.8rem}
+.ar{display:flex;justify-content:space-between;align-items:center;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.75rem}
+.ar:last-child{border-bottom:none}
+.ar .ak{color:var(--muted)}
+.ar .av{font-family:'DM Mono',monospace;color:var(--cream)}
+
+.astr{border-radius:4px;padding:0.6rem 0.8rem;margin-bottom:0.6rem;font-size:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.astr.warn{background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);color:#ffcc80}
+.astr.good{background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.15);color:#a5d6a7}
+
+/* TOAST - FIXED POSITION */
+.toast{
+  position:fixed;
+  bottom:calc(6rem + var(--safe-bottom));
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--gold);
+  color:var(--dark);
+  padding:0.7rem 1.2rem;
+  border-radius:6px;
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  opacity:0;
+  pointer-events:none;
+  transition:all .3s;
+  z-index:1000;
+  max-width:90%;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+.empty-s{text-align:center;padding:2rem;color:var(--muted);font-size:0.78rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:.2rem}
+.sec-sub{font-size:.72rem;color:var(--muted);margin-bottom:1.2rem}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;flex-wrap:wrap;gap:0.5rem}
+.sec-header-label{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sand)}
+
+.install-banner{display:none;background:linear-gradient(135deg,rgba(232,197,71,0.15),rgba(212,165,116,0.08));border:1px solid rgba(232,197,71,0.25);border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;align-items:center;gap:0.8rem}
+.install-banner.show{display:flex}
+.install-banner-text{flex:1;font-size:0.72rem;line-height:1.4}
+.install-banner-btn{background:var(--gold);color:var(--dark);border:none;padding:0.5rem 0.9rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;border-radius:4px;cursor:pointer;white-space:nowrap}
+.install-banner-btn:active{transform:scale(0.96)}
+
+@media(min-width:768px){
+  .header{padding:1.5rem 2rem}
+  .logo-title{font-size:1.8rem}
+  .logo-sub{font-size:0.55rem}
+  .main{padding:1.5rem 2rem;max-width:1000px;margin:0 auto}
+  .stock-banner{padding:1rem 1.5rem;display:flex;gap:2rem;flex-wrap:wrap}
+  .panels{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .stats-bar{grid-template-columns:repeat(6,1fr)}
+  .ag{grid-template-columns:1fr 1fr}
+  .nav{justify-content:center;gap:0.5rem;padding:0.5rem 1rem}
+  .nb{flex-direction:row;gap:0.4rem;padding:0.6rem 1rem;flex:none}
+  .nb-icon{font-size:1rem}
+  .nb-text{font-size:0.6rem}
+}
+@media(min-width:1024px){.main{max-width:1200px}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app">
+  <header class="header">
+    <div class="logo-box">
+      <div class="logo-icon">🐑</div>
+      <div class="logo-text">
+        <div class="logo-title">КОЙ БАЗАР</div>
+        <div class="logo-sub">Соода Трекер</div>
+      </div>
+    </div>
+    <div class="hd" id="hd"></div>
+  </header>
+
+  <main class="main" id="main">
+    <div class="install-banner" id="install-banner">
+      <div class="install-banner-text">Тиркемени башкы экранга кошуп,<br>оффлайн режимде колдонуңуз</div>
+      <button class="install-banner-btn" id="install-btn">Орнотуу</button>
+    </div>
+
+    <div class="sec active" id="tab-buy">
+      <div class="sec-title">Кой Сатып Алуу</div>
+      <div class="sec-sub">Ар бир жерден алган коюңузду жазыңыз</div>
+      <div class="stock-banner" id="buy-stock-banner"></div>
+      <div class="panels">
+        <div class="panel">
+          <div class="panel-title">Алуу маалыматы</div>
+          <div class="field-row">
+            <div class="field"><label>Алган күн</label><input type="date" id="b-date"></div>
+            <div class="field"><label>Жер / Базар</label><input type="text" id="b-place" placeholder="Ош базары"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Кой саны</label><input type="number" id="b-count" placeholder="20" min="1" inputmode="numeric"></div>
+            <div class="field"><label>Сатып алуу (сом)</label><input type="number" id="b-buy" placeholder="100000" min="0" inputmode="numeric"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Транспорт (сом)</label><input type="number" id="b-transport" placeholder="3000" min="0" inputmode="numeric"></div>
+            <div class="field"><label>Башка чыгым (сом)</label><input type="number" id="b-other" placeholder="0" min="0" inputmode="numeric"></div>
+          </div>
+          <div class="field"><label>Эскертме</label><input type="text" id="b-note" placeholder="Кой түрү, сапаты..."></div>
+          <div class="btn-row">
+            <button class="btn-p" id="btn-add-buy">Складка Кош</button>
+            <button class="btn-g" id="btn-clear-buy-form">Тазала</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Тез эсеп</div>
+          <div class="prev-box" id="buy-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" id="tab-sell">
+      <div class="sec-title">Кой Сатуу</div>
+      <div class="sec-sub">Кайсы партиядан саттыңыз</div>
+      <div class="stock-banner" id="sell-stock-banner"></div>
+      <div class="panels">
+        <div class="panel">
+          <div class="panel-title">Партияны танда</div>
+          <div id="sell-source-list" class="sell-source-list"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Сатуу маалыматы</div>
+          <div class="field-row">
+            <div class="field"><label>Саткан күн</label><input type="date" id="s-date"></div>
+            <div class="field"><label>Кимге</label><input type="text" id="s-buyer" placeholder="Алмазбек"></div>
+          </div>
+          <div class="field"><label>Сатуу суммасы (сом)</label><input type="number" id="s-sell" placeholder="80000" min="0" inputmode="numeric"></div>
+          <div class="field"><label>Эскертме</label><input type="text" id="s-note" placeholder="Кошумча маалымат..."></div>
+          <div class="prev-box" id="sell-preview"></div>
+          <div class="btn-row">
+            <button class="btn-p" id="btn-add-sale">Сатуу Жаз</button>
+            <button class="btn-g" id="btn-clear-sell-form">Тазала</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" id="tab-stock">
+      <div class="sec-title">Склад & Тарых</div>
+      <div class="sec-sub">Кой запасы жана соода тарыхы</div>
+      <div class="stats-bar" id="stock-stats"></div>
+      <div style="margin-bottom:1.5rem">
+        <div class="sec-header">
+          <div class="sec-header-label">Учурдагы Склад</div>
+          <button class="btn-clear-all" id="btn-clear-all-buys">Бүттөн Тазалоо</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Күн</th><th>Жер</th><th>Алган</th><th>Сат.</th><th>Кал.</th><th>Баасы</th><th>Транс.</th><th>1 кой</th><th>Эск.</th><th></th></tr></thead>
+            <tbody id="stock-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec-header">
+          <div class="sec-header-label">Сатуулар Тарыхы</div>
+          <button class="btn-clear-all" id="btn-clear-all-sales">Тарыхты Тазалоо</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Күн</th><th>Кимге</th><th>Баш</th><th>Партия</th><th>Сатуу</th><th>Чыгым</th><th>Киреше</th><th>Эск.</th><th></th></tr></thead>
+            <tbody id="sales-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" id="tab-analysis">
+      <div class="sec-title">Акылдуу Анализ</div>
+      <div class="sec-sub">Бизнесиңиздин статистикасы</div>
+      <div id="analysis-content"></div>
+    </div>
+  </main>
+
+  <nav class="nav">
+    <button class="nb active" data-tab="buy"><span class="nb-icon">🛒</span><span class="nb-text">Алуу</span></button>
+    <button class="nb" data-tab="sell"><span class="nb-icon">💰</span><span class="nb-text">Сатуу</span></button>
+    <button class="nb" data-tab="stock"><span class="nb-icon">📦</span><span class="nb-text">Склад</span></button>
+    <button class="nb" data-tab="analysis"><span class="nb-icon">📊</span><span class="nb-text">Анализ</span></button>
+  </nav>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let buys=[],sales=[];
+try{buys=JSON.parse(localStorage.getItem('kb_buys')||'[]')}catch(e){buys=[]}
+try{sales=JSON.parse(localStorage.getItem('kb_sales')||'[]')}catch(e){sales=[]}
+
+function save(){localStorage.setItem('kb_buys',JSON.stringify(buys));localStorage.setItem('kb_sales',JSON.stringify(sales))}
+function fmt(n){if(n==null||isNaN(n))return'—';return Math.round(n).toLocaleString('ru-RU')+' с'}
+function costPerHead(b){return b.count>0?(b.buy+b.transport+(b.other||0))/b.count:0}
+function remaining(b){return b.count-(b.sold||0)}
+function vibrate(pat){if(navigator.vibrate)navigator.vibrate(pat||[10])}
+
+const now=new Date();
+document.getElementById('hd').innerHTML=`<div>${now.toLocaleDateString('ru-RU',{weekday:'short'})}</div><div style="color:var(--sand);font-size:0.55rem">${now.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</div>`;
+document.getElementById('b-date').value=now.toISOString().split('T')[0];
+document.getElementById('s-date').value=now.toISOString().split('T')[0];
+
+document.querySelectorAll('.nb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    vibrate();
+    const name=btn.dataset.tab;
+    document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById('tab-'+name).classList.add('active');
+    if(name==='sell')renderSellSources();
+    if(name==='stock')renderStock();
+    if(name==='analysis')renderAnalysis();
+    updateStockBanner(name);
+    document.getElementById('main').scrollTop=0;
+  });
+});
+
+function updateStockBanner(tab){
+  const totalBought=buys.reduce((a,b)=>a+b.count,0);
+  const totalSold=buys.reduce((a,b)=>a+(b.sold||0),0);
+  const rem=totalBought-totalSold;
+  const totalCost=buys.reduce((a,b)=>a+b.buy+b.transport+(b.other||0),0);
+  const avgCost=totalBought>0?totalCost/totalBought:0;
+  const html=`
+    <div class="stock-item"><div class="sl">Алган</div><div class="sv">${totalBought}</div></div>
+    <div class="stock-item"><div class="sl">Сат.</div><div class="sv sm" style="color:var(--sand)">${totalSold}</div></div>
+    <div class="stock-item"><div class="sl">Калган</div><div class="sv" style="color:${rem>0?'var(--gold)':'#e57373'}">${rem}</div></div>
+    <div class="stock-item"><div class="sl">Орт. 1 кой</div><div class="sv sm">${fmt(avgCost)}</div></div>`;
+  const el=document.getElementById(tab==='buy'?'buy-stock-banner':'sell-stock-banner');
+  if(el)el.innerHTML=html;
+}
+
+function updateBuyPreview(){
+  const count=parseFloat(document.getElementById('b-count').value)||0;
+  const buy=parseFloat(document.getElementById('b-buy').value)||0;
+  const tr=parseFloat(document.getElementById('b-transport').value)||0;
+  const ot=parseFloat(document.getElementById('b-other').value)||0;
+  const tot=buy+tr+ot;
+  document.getElementById('buy-preview').innerHTML=`
+    <div class="prev-row"><span class="pk">Кой саны</span><span class="pv">${count?count+' баш':'—'}</span></div>
+    <div class="prev-row"><span class="pk">1 кой баасы</span><span class="pv">${count&&buy?fmt(buy/count):'—'}</span></div>
+    <div class="prev-div"></div>
+    <div class="prev-row"><span class="pk">Сатып алуу</span><span class="pv">${buy?fmt(buy):'—'}</span></div>
+    <div class="prev-row"><span class="pk">Транспорт</span><span class="pv">${tr?fmt(tr):'—'}</span></div>
+    <div class="prev-row"><span class="pk">Башка</span><span class="pv">${ot?fmt(ot):'—'}</span></div>
+    <div class="prev-div"></div>
+    <div class="prev-row tot"><span class="pk">Жалпы</span><span class="pv">${tot?fmt(tot):'—'}</span></div>
+    <div class="prev-row tot"><span class="pk">1 кой чыгымы</span><span class="pv">${count&&tot?fmt(tot/count):'—'}</span></div>`;
+}
+['b-count','b-buy','b-transport','b-other'].forEach(id=>document.getElementById(id).addEventListener('input',updateBuyPreview));
+
+document.getElementById('btn-add-buy').addEventListener('click',()=>{
+  vibrate([15]);
+  const date=document.getElementById('b-date').value;
+  const place=document.getElementById('b-place').value.trim()||'Белгисиз';
+  const count=parseFloat(document.getElementById('b-count').value);
+  const buy=parseFloat(document.getElementById('b-buy').value);
+  const transport=parseFloat(document.getElementById('b-transport').value)||0;
+  const other=parseFloat(document.getElementById('b-other').value)||0;
+  const note=document.getElementById('b-note').value.trim();
+  if(!date||!count||!buy){showToast('Күн, кой саны жана баасы керек!',true);return}
+  buys.unshift({id:Date.now(),date,place,count,sold:0,buy,transport,other,note});
+  save();
+  clearBuyForm();
+  updateStockBanner('buy');
+  showToast(`${count} баш кой кошулду`);
+});
+document.getElementById('btn-clear-buy-form').addEventListener('click',clearBuyForm);
+function clearBuyForm(){
+  vibrate();
+  ['b-place','b-count','b-buy','b-transport','b-other','b-note'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('b-date').value=now.toISOString().split('T')[0];
+  updateBuyPreview();
+}
+
+let sellSelections={};
+function renderSellSources(){
+  sellSelections={};
+  const available=buys.filter(b=>remaining(b)>0);
+  const el=document.getElementById('sell-source-list');
+  if(!available.length){el.innerHTML='<div class="empty-s">Складда кой жок</div>';return}
+  el.innerHTML=available.map(b=>{
+    const rem=remaining(b);
+    const cph=costPerHead(b).toFixed(0);
+    return`<div class="ssl-item" data-sid="${b.id}">
+      <div style="flex:1">
+        <div class="si-name">${b.place} — ${b.date.split('-').reverse().join('.')}</div>
+        <div style="font-size:0.6rem;color:var(--muted);margin-top:1px">1 кой: ${Number(cph).toLocaleString('ru-RU')} с</div>
+      </div>
+      <div class="si-stock">${rem} баш</div>
+      <input class="ssl-qty" data-qid="${b.id}" type="number" min="0" max="${rem}" placeholder="0" value="" inputmode="numeric">
+    </div>`;
+  }).join('');
+  updateSellPreview();
+}
+
+document.getElementById('sell-source-list').addEventListener('click',e=>{
+  const item=e.target.closest('.ssl-item');
+  if(!item)return;
+  const id=item.dataset.sid;
+  const qtyInput=item.querySelector('.ssl-qty');
+  if(e.target.classList.contains('ssl-qty'))return;
+  const isSelected=item.classList.contains('selected');
+  if(isSelected){item.classList.remove('selected');qtyInput.value='';delete sellSelections[id];vibrate();}
+  else{item.classList.add('selected');qtyInput.focus();vibrate([15]);}
+  updateSellPreview();
+});
+
+document.getElementById('sell-source-list').addEventListener('input',e=>{
+  if(!e.target.classList.contains('ssl-qty'))return;
+  const input=e.target;
+  const id=input.dataset.qid;
+  const max=parseInt(input.max);
+  let v=parseInt(input.value)||0;
+  if(v>max){v=max;input.value=max}
+  if(v<0){v=0;input.value=0}
+  const item=input.closest('.ssl-item');
+  if(v>0){item.classList.add('selected');sellSelections[id]=v;}
+  else{item.classList.remove('selected');delete sellSelections[id];}
+  updateSellPreview();
+});
+
+function updateSellPreview(){
+  let totalQty=0,totalCostAmt=0;
+  Object.entries(sellSelections).forEach(([id,qty])=>{
+    const b=buys.find(x=>x.id==id);
+    if(b&&qty>0){totalQty+=qty;totalCostAmt+=costPerHead(b)*qty}
+  });
+  const sell=parseFloat(document.getElementById('s-sell').value)||0;
+  const profit=sell?sell-totalCostAmt:null;
+  document.getElementById('sell-preview').innerHTML=`
+    <div class="prev-row"><span class="pk">Тандалган</span><span class="pv">${totalQty?totalQty+' баш':'0'}</span></div>
+    <div class="prev-row"><span class="pk">Чыгым баасы</span><span class="pv">${totalQty?fmt(totalCostAmt):'—'}</span></div>
+    <div class="prev-div"></div>
+    <div class="prev-row"><span class="pk">Сатуу</span><span class="pv">${sell?fmt(sell):'—'}</span></div>
+    <div class="prev-row pro"><span class="pk">Киреше</span><span class="pv ${profit!=null?(profit>=0?'pos':'neg'):''}">${profit!=null?(profit>=0?'+':'')+fmt(profit):'—'}</span></div>`;
+}
+document.getElementById('s-sell').addEventListener('input',updateSellPreview);
+
+document.getElementById('btn-add-sale').addEventListener('click',()=>{
+  vibrate([15]);
+  const date=document.getElementById('s-date').value;
+  const buyer=document.getElementById('s-buyer').value.trim()||'Белгисиз';
+  const sell=parseFloat(document.getElementById('s-sell').value);
+  const note=document.getElementById('s-note').value.trim();
+  const items=Object.entries(sellSelections).filter(([,q])=>q>0).map(([id,qty])=>{
+    const b=buys.find(x=>x.id==id);
+    return{buyId:Number(id),qty,costPerHead:costPerHead(b),place:b.place,date:b.date}
+  });
+  if(!date||!sell){showToast('Күн жана сатуу суммасы керек!',true);return}
+  if(!items.length){showToast('Партияны тандаңыз!',true);return}
+  items.forEach(it=>{const b=buys.find(x=>x.id===it.buyId);if(b)b.sold=(b.sold||0)+it.qty;});
+  const totalQty=items.reduce((a,i)=>a+i.qty,0);
+  const totalCostAmt=items.reduce((a,i)=>a+i.costPerHead*i.qty,0);
+  sales.unshift({id:Date.now(),date,buyer,items,sell,totalQty,totalCostAmt,note});
+  save();
+  clearSellForm();
+  renderSellSources();
+  updateStockBanner('sell');
+  showToast(`${totalQty} баш сатылды`);
+});
+document.getElementById('btn-clear-sell-form').addEventListener('click',clearSellForm);
+function clearSellForm(){
+  vibrate();
+  ['s-buyer','s-sell','s-note'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-date').value=now.toISOString().split('T')[0];
+  sellSelections={};
+  renderSellSources();
+}
+
+function renderStock(){
+  const totalBought=buys.reduce((a,b)=>a+b.count,0);
+  const totalSold=buys.reduce((a,b)=>a+(b.sold||0),0);
+  const rem=totalBought-totalSold;
+  const totalCostAll=buys.reduce((a,b)=>a+b.buy+b.transport+(b.other||0),0);
+  const totalSellAll=sales.reduce((a,s)=>a+s.sell,0);
+  const totalProfit=totalSellAll-sales.reduce((a,s)=>a+s.totalCostAmt,0);
+  document.getElementById('stock-stats').innerHTML=`
+    <div class="sc"><div class="sl">Алган</div><div class="sv">${totalBought}</div></div>
+    <div class="sc"><div class="sl">Сат.</div><div class="sv sand">${totalSold}</div></div>
+    <div class="sc"><div class="sl">Склад</div><div class="sv ${rem>0?'gold':'red'}">${rem}</div></div>
+    <div class="sc"><div class="sl">Чыгым</div><div class="sv sand">${fmt(totalCostAll)}</div></div>
+    <div class="sc"><div class="sl">Сатуу</div><div class="sv">${totalSellAll?fmt(totalSellAll):'—'}</div></div>
+    <div class="sc"><div class="sl">Киреше</div><div class="sv ${totalProfit>=0?'green':'red'}">${sales.length?fmt(totalProfit):'—'}</div></div>`;
+  const sb=document.getElementById('stock-body');
+  if(!buys.length){sb.innerHTML='<tr><td colspan="10" class="empty-s">Жазуу жок</td></tr>'}
+  else{
+    sb.innerHTML=buys.map(b=>{
+      const rem2=remaining(b);
+      const cph=costPerHead(b);
+      return`<tr>
+        <td class="mono">${b.date.split('-').reverse().join('.')}</td>
+        <td>${b.place}</td>
+        <td class="mono">${b.count}</td>
+        <td class="mono" style="color:var(--sand)">${b.sold||0}</td>
+        <td class="mono"><strong>${rem2}</strong></td>
+        <td class="mono">${fmt(b.buy)}</td>
+        <td class="mono" style="color:var(--muted)">${b.transport?fmt(b.transport):'—'}</td>
+        <td class="mono" style="color:var(--gold)">${fmt(cph)}</td>
+        <td style="font-size:0.65rem;color:var(--muted)">${b.note||'—'}</td>
+        <td>${rem2===0?'<span class="badge bp">Бүттү</span>':'<span class="badge bw">Бар</span>'}<button class="btn-d" data-delete-buy="${b.id}">Өчүр</button></td>
+      </tr>`;
+    }).join('');
+  }
+  const sl=document.getElementById('sales-body');
+  if(!sales.length){sl.innerHTML='<tr><td colspan="9" class="empty-s">Сатуу жок</td></tr>'}
+  else{
+    sl.innerHTML=sales.map(s=>{
+      const p=s.sell-s.totalCostAmt;
+      return`<tr>
+        <td class="mono">${s.date.split('-').reverse().join('.')}</td>
+        <td>${s.buyer}</td>
+        <td class="mono">${s.totalQty}</td>
+        <td style="font-size:0.65rem;color:var(--muted)">${s.items.map(i=>`${i.place}: ${i.qty}`).join(', ')}</td>
+        <td class="mono">${fmt(s.sell)}</td>
+        <td class="mono" style="color:var(--muted)">${fmt(s.totalCostAmt)}</td>
+        <td><span class="badge ${p>=0?'bp':'bl'}">${p>=0?'+':''}${fmt(p)}</span></td>
+        <td style="font-size:0.65rem;color:var(--muted)">${s.note||'—'}</td>
+        <td><button class="btn-d" data-delete-sale="${s.id}">Өчүр</button></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+document.getElementById('stock-body').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-delete-buy]');
+  if(btn){vibrate([20,30,20]);deleteBuy(Number(btn.dataset.deleteBuy));}
+});
+document.getElementById('sales-body').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-delete-sale]');
+  if(btn){vibrate([20,30,20]);deleteSale(Number(btn.dataset.deleteSale));}
+});
+
+function deleteBuy(id){
+  const b=buys.find(x=>x.id===id);
+  if(!b)return;
+  if((b.sold||0)>0){if(!confirm(`Бул партиядан ${b.sold} баш сатылган! Өчүрөсүзбү?`))return;}
+  else{if(!confirm(`${b.place} — ${b.count} баш өчүрөсүзбү?`))return;}
+  buys=buys.filter(x=>x.id!==id);
+  save();renderStock();showToast('Партия өчүрүлдү');
+}
+
+function deleteSale(id){
+  const s=sales.find(x=>x.id===id);
+  if(!s)return;
+  if(!confirm(`${s.totalQty} баш сатууну өчүрөсүзбү? Кой складга кайтат.`))return;
+  s.items.forEach(it=>{const b=buys.find(x=>x.id===it.buyId);if(b)b.sold=Math.max(0,(b.sold||0)-it.qty);});
+  sales=sales.filter(x=>x.id!==id);
+  save();renderStock();showToast('Сатуу өчүрүлдү');
+}
+
+document.getElementById('btn-clear-all-buys').addEventListener('click',()=>{
+  vibrate([30,40,30]);
+  if(!buys.length){showToast('Склад бош',true);return}
+  if(!confirm('Бүт складды тазалайсызбы?'))return;
+  buys=[];save();renderStock();showToast('Склад тазаланды');
+});
+document.getElementById('btn-clear-all-sales').addEventListener('click',()=>{
+  vibrate([30,40,30]);
+  if(!sales.length){showToast('Тарых бош',true);return}
+  if(!confirm('Бүт сатуулар тарыхын тазалайсызбы?'))return;
+  sales=[];save();renderStock();showToast('Тарых тазаланды');
+});
+
+function renderAnalysis(){
+  const el=document.getElementById('analysis-content');
+  if(!buys.length){el.innerHTML='<div class="empty-s">Маалымат жок</div>';return}
+  const totalBought=buys.reduce((a,b)=>a+b.count,0);
+  const totalSold=buys.reduce((a,b)=>a+(b.sold||0),0);
+  const rem=totalBought-totalSold;
+  const totalCostAll=buys.reduce((a,b)=>a+b.buy+b.transport+(b.other||0),0);
+  const totalSellAll=sales.reduce((a,s)=>a+s.sell,0);
+  const totalCostSold=sales.reduce((a,s)=>a+s.totalCostAmt,0);
+  const totalProfit=totalSellAll-totalCostSold;
+  const roi=totalCostSold>0?totalProfit/totalCostSold*100:null;
+  const alerts=[];
+  if(roi!==null&&roi<10)alerts.push({t:'warn',m:`Рентабелдүүлүк төмөн: ${roi.toFixed(1)}%`});
+  if(roi!==null&&roi>=20)alerts.push({t:'good',m:`Мыкты! Рентабелдүүлүк: ${roi.toFixed(1)}%`});
+  el.innerHTML=`
+    ${alerts.map(a=>`<div class="astr ${a.t}">${a.m}</div>`).join('')}
+    <div class="ag">
+      <div class="ac"><h3>Акча</h3>
+        <div class="ar"><span class="ak">Жалпы чыгым</span><span class="av">${fmt(totalCostAll)}</span></div>
+        <div class="ar"><span class="ak">Жалпы сатуу</span><span class="av">${totalSellAll?fmt(totalSellAll):'—'}</span></div>
+        <div class="ar"><span class="ak">Таза киреше</span><span class="av" style="color:${totalProfit>=0?'#81c784':'#e57373'}">${sales.length?fmt(totalProfit):'—'}</span></div>
+      </div>
+      <div class="ac"><h3>Кой</h3>
+        <div class="ar"><span class="ak">Алынган</span><span class="av">${totalBought} баш</span></div>
+        <div class="ar"><span class="ak">Сатылган</span><span class="av">${totalSold} баш</span></div>
+        <div class="ar"><span class="ak">Калган</span><span class="av">${rem} баш</span></div>
+      </div>
+    </div>`;
+}
+
+function showToast(msg,err=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=err?'#c0392b':'var(--gold)';
+  t.style.color=err?'#fff':'var(--dark)';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  document.getElementById('install-banner').classList.add('show');
+});
+document.getElementById('install-btn').addEventListener('click',async()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  const{outcome}=await deferredPrompt.userChoice;
+  if(outcome==='accepted')showToast('Тиркеме орнотулду!');
+  deferredPrompt=null;
+  document.getElementById('install-banner').classList.remove('show');
+});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;document.getElementById('install-banner').classList.remove('show');});
+
+if('serviceWorker'in navigator){
+  const swCode=`
+    const CACHE='koy-bazar-v2';
+    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./']))));
+    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+  `;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}))).catch(()=>{});
+}
+
+updateStockBanner('buy');
+updateBuyPreview();
+</script>
+</body>
+</html>
